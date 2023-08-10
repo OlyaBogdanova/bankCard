@@ -6,6 +6,9 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  optimizeDeps: {
+    exclude: ['js-big-decimal']
+  },
   plugins: [
     vue({
       template: {
@@ -20,5 +23,6 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
-  }
+  },
+  
 })

@@ -18,11 +18,6 @@ const getCardType = computed(() => {
     return 'visa'
   }
 
-  re = new RegExp('^(34|37)')
-  if (number.match(re) != null) {
-    return 'amex'
-  }
-
   re = new RegExp('^5[1-5]')
   if (number.match(re) != null) {
     return 'mastercard'
@@ -52,7 +47,10 @@ provide('isCardFlipped', isCardFlipped)
 </script>
 
 <template>
-  <div><myCardList /><MyCardFormInner /></div>
+  <div>
+      <myCardList />
+      <MyCardFormInner />
+  </div>
 </template>
 
 <style></style>

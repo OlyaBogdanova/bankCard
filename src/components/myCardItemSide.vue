@@ -37,10 +37,12 @@ export default {
     const cardCvv = inject('cardCvv')
     const getCardType = inject('getCardType')
     const isCardFlipped = inject('isCardFlipped')
+    const currentCardBackground=inject('currentCardBackground')
     return {
       cardCvv,
       getCardType,
-      isCardFlipped
+      isCardFlipped,
+      currentCardBackground
     }
   }
 }

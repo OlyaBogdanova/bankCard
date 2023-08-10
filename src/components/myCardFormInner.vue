@@ -5,10 +5,11 @@
       <input
         type="text"
         id="cardNumber"
-    
+        @input="formatCreditCardNumber"
+        @keydown="handleKeyDown"
+        maxlength="19"
         class="card-input__input"
         v-model="cardNumber"
-        maxlength="19"
         @focus="focusInput"
         @blur="blurInput"
         data-ref="cardNumber"
@@ -87,7 +88,7 @@
   </div>
 </template>
 <script>
-import { inject, onMounted, ref, computed, watch } from 'vue'
+import { inject, onMounted, ref, computed, watch, reactive } from 'vue'
 export default {
   setup() {
     const focusElementStyle = inject('focusElementStyle')
@@ -99,18 +100,16 @@ export default {
     const cardCvv = inject('cardCvv')
     const isCardFlipped = inject('isCardFlipped')
     const minCardYear = new Date().getFullYear()
-    const amexCardMask = '#### ###### #####'
     const otherCardMask = '#### #### #### ####'
     const cardNumberTemp = ref('')
     const isInputFocused = ref(false)
 
     onMounted(() => {
       cardNumberTemp.value = otherCardMask
-
     })
 
     const generateCardNumberMask = computed(() => {
-      return getCardType.value === 'amex' ? amexCardMask : otherCardMask
+      return otherCardMask
     })
 
     const minCardMonth = computed(() => {
@@ -119,7 +118,7 @@ export default {
     })
 
     function flipCard(status) {
-        console.log( isCardFlipped);
+      console.log(isCardFlipped)
       isCardFlipped.value = status
     }
 
@@ -133,7 +132,17 @@ export default {
         transform: `translateX(${target.offsetLeft}px) translateY(${target.offsetTop}px)`
       }
     }
-
+    function formatCreditCardNumber() {
+      cardNumber.value = cardNumber.value
+        .replace(/\D/g, '')
+        .replace(/(.{4})/g, '$1 ')
+        .trim()
+    }
+    function handleKeyDown(event) {
+      if (!/^\d$|^Backspace$|^Delete$/.test(event.key)) {
+        event.preventDefault()
+      }
+    }
     function blurInput() {
       setTimeout(() => {
         if (!isInputFocused.value) {
@@ -143,11 +152,10 @@ export default {
       isInputFocused.value = false
     }
 
-
-    watch(cardYear, ()=>{
-        if (cardMonth.value < minCardMonth.value) {
-           cardMonth.value = ''
-         }
+    watch(cardYear, () => {
+      if (cardMonth.value < minCardMonth.value) {
+        cardMonth.value = ''
+      }
     })
 
     return {
@@ -164,14 +172,12 @@ export default {
       minCardYear,
       blurInput,
       focusInput,
-      generateCardNumberMask 
+      generateCardNumberMask,
+      formatCreditCardNumber,
+      handleKeyDown
     }
   }
-
-
 }
 </script>
 
-<style lang="css">
-
-</style>
+<style lang="css"></style>

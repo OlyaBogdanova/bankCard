@@ -39,13 +39,15 @@
           </transition>
         </div>
       </div>
-      <label for="cardNumber" class="card-item__number" >
-        <template v-if="getCardType === 'amex'">
-          <span v-for="(n, index) in amexCardMask" :key="index">
+      <label for="cardNumber" class="card-item__number">
+       
+
+        <div >
+          <span v-for="(n, index) in otherCardMask" :key="index">
             <transition name="slide-fade-up">
               <div
                 class="card-item__numberItem"
-                v-if="$index > 4 && index < 14 && cardNumber.length > index && n.trim() !== ''"
+                v-if="index > 4 && index < 15 && cardNumber.length > index && n.trim() !== ''"
               >
                 *
               </div>
@@ -67,35 +69,6 @@
               </div>
             </transition>
           </span>
-        </template>
-
-        <div v-else>
-          <span v-for="(n, index) in otherCardMask" :key="index">
-            <transition name="slide-fade-up">
-              <div
-                class="card-item__numberItem"
-                v-if="$index > 4 && $index < 15 && cardNumber.length > $index && n.trim() !== ''"
-              >
-                *
-              </div>
-              <div
-                class="card-item__numberItem"
-                :class="{ '-active': n.trim() === '' }"
-                :key="$index"
-                v-else-if="cardNumber.length > $index"
-              >
-                {{ cardNumber[$index] }}
-              </div>
-              <div
-                class="card-item__numberItem"
-                :class="{ '-active': n.trim() === '' }"
-                v-else
-                :key="$index + 1"
-              >
-                {{ n }}
-              </div>
-            </transition>
-          </span>
         </div>
       </label>
       <div class="card-item__content">
@@ -104,14 +77,14 @@
           <transition name="slide-fade-up">
             <div class="card-item__name" v-if="cardName.length" key="1">
               <transition-group name="slide-fade-right">
-               <div    v-if="$index === $index">
-                <span
-                  class="card-item__nameItem"
-                  v-for="(n, $index) in cardName.replace(/\s\s+/g, ' ')"
-                  :key="$index + 1"
-                  >{{ n }}</span
-                >
-               </div>
+                <div v-if="index === index">
+                  <span
+                    class="card-item__nameItem"
+                    v-for="(n, index) in cardName.replace(/\s\s+/g, ' ')"
+                    :key="index + 1"
+                    >{{ n }}</span
+                  >
+                </div>
               </transition-group>
             </div>
             <div class="card-item__name" v-else key="2">Full Name</div>
@@ -128,7 +101,7 @@
 
           <label for="cardYear" class="card-item__dateItem">
             <transition name="slide-fade-up">
-              <span v-if="cardYear" :key="cardYear">{{ String(cardYear).slice(2, 4) }}</span>
+              <span v-if="cardYear" :key="cardYear">{{+ String(cardYear).slice(2, 4) }}</span>
               <span v-else key="2">YY</span>
             </transition>
           </label>
@@ -139,7 +112,8 @@
 </template>
 
 <script>
-import { computed, inject } from 'vue'
+import {  inject } from 'vue'
+
 export default {
   setup() {
     const focusElementStyle = inject('focusElementStyle')
@@ -151,12 +125,18 @@ export default {
     const cardCvv = inject('cardCvv')
     const otherCardMask = '#### #### #### ####'
 
-    const currentCardBackground = computed(() => {
-      return Math.floor(Math.random() * 25 + 1)
-    })
+    const currentCardBackground = inject('currentCardBackground')
 
     return {
-        currentCardBackground, focusElementStyle, getCardType, cardNumber, cardName, cardMonth, cardYear, cardCvv,  otherCardMask 
+      currentCardBackground,
+      focusElementStyle,
+      getCardType,
+      cardNumber,
+      cardName,
+      cardMonth,
+      cardYear,
+      cardCvv,
+      otherCardMask
     }
   }
 }

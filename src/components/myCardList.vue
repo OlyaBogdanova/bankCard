@@ -7,7 +7,7 @@
   </div>
 </template>
 <script>
-import { ref, provide, inject } from 'vue'
+import { inject, computed, provide } from 'vue'
 import myCardItemFront from './myCardItemFront.vue'
 import myCardItemSide from './myCardItemSide.vue'
 
@@ -16,6 +16,10 @@ export default {
 
   setup() {
     const isCardFlipped = inject('isCardFlipped')
+    const currentCardBackground = computed(() => {
+      return Math.floor(Math.random() * 25 + 1)
+    })
+    provide('currentCardBackground', currentCardBackground)
     return { isCardFlipped }
   }
 }
